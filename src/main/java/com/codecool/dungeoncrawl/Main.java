@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -30,11 +31,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
+
+        Button button = new Button("Pick up");
+
+
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+
+        ui.add(new Label("", button), 0, 2);
 
         BorderPane borderPane = new BorderPane();
 
