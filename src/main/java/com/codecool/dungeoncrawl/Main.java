@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -32,8 +34,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
 
-        Button button = new Button("Pick up");
-
+//        Button button = new Button("Pick up");
+//        button.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                System.out.println("Button clicked");
+//                map.getPlayer().pickUp();
+//            }
+//        });
 
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -41,7 +49,7 @@ public class Main extends Application {
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
 
-        ui.add(new Label("", button), 0, 2);
+        //ui.add(new Label("", button), 0, 2);
 
         BorderPane borderPane = new BorderPane();
 
@@ -77,6 +85,7 @@ public class Main extends Application {
                 break;
         }
     }
+
 
     private void refresh() {
         context.setFill(Color.BLACK);

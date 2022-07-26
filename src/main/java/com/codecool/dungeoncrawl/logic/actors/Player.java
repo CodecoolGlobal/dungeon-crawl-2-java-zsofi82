@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
+
 public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
@@ -24,4 +25,10 @@ public class Player extends Actor {
             PlayerCell.setActor(this);
         }
     }
+
+//    public void pickUp() {
+//        if (PlayerCell.equals(Item.getCell())) {
+//
+//        }
+//    }
 }

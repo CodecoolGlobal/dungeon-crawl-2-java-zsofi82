@@ -5,10 +5,14 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Item implements Drawable {
 
-    Cell cell;
+    static Cell cell;
 
     public Item(Cell cell) {
-        this.cell = cell;
+        Item.cell = cell;
+    }
+
+    public static Cell getCell() {
+        return cell;
     }
 
 }
