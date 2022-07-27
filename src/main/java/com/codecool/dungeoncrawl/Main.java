@@ -3,6 +3,8 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +20,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Canvas canvas = new Canvas(
@@ -25,6 +30,7 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label itemLabel = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -48,6 +54,8 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("Picked up items: \n"), 0, 1);
+        ui.add(itemLabel, 0, 2);
 
         //ui.add(new Label("", button), 0, 2);
 
@@ -103,5 +111,6 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        itemLabel.setText("" + map.getPlayer().items.toString());
     }
 }
