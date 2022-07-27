@@ -1,17 +1,17 @@
-package com.codecool.dungeoncrawl.logic.actors;
+package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Item implements Drawable {
 
-    static Cell cell;
+    Cell cell;
 
     public Item(Cell cell) {
-        Item.cell = cell;
+        this.cell = cell;
     }
 
-    public static Cell getCell() {
+    public Cell getCell() {
         return cell;
     }
 
