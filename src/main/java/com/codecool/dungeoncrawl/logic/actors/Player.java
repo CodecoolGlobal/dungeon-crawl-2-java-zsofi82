@@ -20,7 +20,11 @@ public class Player extends Actor {
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = playerCell.getNeighbour(dx, dy);
+
+        if ((nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR)) && !(nextCell.getActor() instanceof Skeleton)) {
+
         if (nextCell.getType().equals(CellType.FLOOR) && !(nextCell.getActor() instanceof Zombie) && !(nextCell.getActor() instanceof Skeleton)) {
+
             playerCell.setActor(null);
             nextCell.setActor(this);
             playerCell = nextCell;
@@ -37,4 +41,6 @@ public class Player extends Actor {
         items.add(playerCell.getItem().getTileName());
         System.out.println(items);
     }
+
+
 }
