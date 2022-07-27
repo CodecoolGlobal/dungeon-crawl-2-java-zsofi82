@@ -16,27 +16,25 @@ public class Player extends Actor {
     public String getTileName() {
         return "player";
     }
-    Cell PlayerCell = getCell();
+    Cell playerCell = getCell();
     @Override
     public void move(int dx, int dy) {
-        Cell nextCell = PlayerCell.getNeighbour(dx, dy);
+        Cell nextCell = playerCell.getNeighbour(dx, dy);
         if (nextCell.getType().equals(CellType.FLOOR) && !(nextCell.getActor() instanceof Skeleton)) {
-            PlayerCell.setActor(null);
+            playerCell.setActor(null);
             nextCell.setActor(this);
-            PlayerCell = nextCell;
-            if (PlayerCell.getItem() != null) {
-                addInventory();
-                PlayerCell.setItem(null);
+            playerCell = nextCell;
+            if (playerCell.getItem() != null) {
+                addInventory(playerCell);
+                playerCell.setItem(null);
             }
         } else {
-            PlayerCell.setActor(this);
+            playerCell.setActor(this);
         }
     }
 
-    public void addInventory() {
-        if (PlayerCell.getItem() != null) {
-            items.add(PlayerCell.getItem().getTileName());
-        }
+    public void addInventory(Cell playerCell) {
+        items.add(playerCell.getItem().getTileName());
         System.out.println(items);
     }
 }
