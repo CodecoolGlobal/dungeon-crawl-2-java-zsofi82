@@ -39,4 +39,8 @@ public class GameMap {
     public int getHeight() {
         return height;
     }
+
+    public String listItems() {
+        return String.join(", ", player.items);
+    }
 }
