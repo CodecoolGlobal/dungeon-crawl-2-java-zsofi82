@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
@@ -107,6 +108,8 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getItem(),x,y);
                 } else {
                     Tiles.drawTile(context, cell, x, y);
+                    if(map.getPlayer() != null && map.getPlayer().items.contains("key") && cell.getType().equals(CellType.CLOSEDDOOR)){
+                        cell.setType(CellType.OPENDOOR);
                 }
             }
         }
@@ -114,4 +117,4 @@ public class Main extends Application {
         itemLabel.setText("" + map.listItems());
     }
 
-}
+}}

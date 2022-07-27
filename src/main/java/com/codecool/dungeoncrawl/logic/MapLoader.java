@@ -50,6 +50,9 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             cell.setItem(new Key(cell));
                             break;
+                        case 'D':
+                            cell.setType(CellType.CLOSEDDOOR);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
