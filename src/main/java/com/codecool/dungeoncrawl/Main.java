@@ -123,7 +123,6 @@ public class Main extends Application {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
-                    //System.out.println(cell.getActor().getTileName().equals("Zombie") ? cell.getActor().getX() : null);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(),x,y);
                 } else {
