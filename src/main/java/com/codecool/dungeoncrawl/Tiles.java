@@ -36,9 +36,9 @@ public class Tiles {
 
     }
 
-    public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
+    public static void drawTile(GraphicsContext context, Drawable d, int x, int y, int zoom) {
         Tile tile = tileMap.get(d.getTileName());
         context.drawImage(tileset, tile.x, tile.y, tile.w, tile.h,
-                x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
+                x * TILE_WIDTH*zoom, y * TILE_WIDTH*zoom, TILE_WIDTH*zoom, TILE_WIDTH*zoom);
     }
 }

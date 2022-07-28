@@ -18,20 +18,20 @@ public class Player extends Actor {
     public String getTileName() {
         return "player";
     }
-    Cell playerCell = getCell();
+    //Cell playerCell = getCell();
     @Override
     public void move(int dx, int dy) {
-        Cell nextCell = playerCell.getNeighbour(dx, dy);
+        Cell nextCell = cell.getNeighbour(dx, dy);
         if (playerCanMove(nextCell)) {
-            playerCell.setActor(null);
+            cell.setActor(null);
             nextCell.setActor(this);
-            playerCell = nextCell;
-            if (playerCell.getItem() != null) {
-                addInventory(playerCell);
-                playerCell.setItem(null);
+            cell = nextCell;
+            if (cell.getItem() != null) {
+                addInventory(cell);
+                cell.setItem(null);
             }
         } else {
-            playerCell.setActor(this);
+            cell.setActor(this);
         }
     }
 
