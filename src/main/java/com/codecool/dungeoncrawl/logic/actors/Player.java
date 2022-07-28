@@ -10,6 +10,8 @@ import java.util.List;
 public class Player extends Actor {
     public List<String> items = new ArrayList<>();
 
+    private int playerHealth = 10;
+
     public int attack = 0;
     public Player(Cell cell) {
         super(cell);
@@ -26,8 +28,10 @@ public class Player extends Actor {
         final boolean isNextCellZombie = nextCell.getActor() instanceof Zombie;
         final boolean isNextCellFloor = nextCell.getType().equals(CellType.FLOOR);
         final boolean isNextCellOpenDoor = nextCell.getType().equals(CellType.OPENDOOR);
+        final boolean isMeat = nextCell.getType().equals(CellType.FLOOR);
+        final boolean isFire = nextCell.getType().equals(CellType.FLOOR);
 
-        if (isNextCellFloor || isNextCellOpenDoor) {
+        if (isNextCellFloor || isNextCellOpenDoor || isMeat || isFire) {
             if (attack > 0 && (isNextCellSkeleton || isNextCellZombie)) {
                 nextCell.getActor().setHealth(nextCell.getActor().getHealth() - attack);
                 attack -= 5;
@@ -52,25 +56,36 @@ public class Player extends Actor {
         }
     }
 
-    private boolean playerCanMove(Cell nextCell) {
-        return (nextCell.getType().equals(CellType.FLOOR)
-                || nextCell.getType().equals(CellType.OPENDOOR))
-                && !(nextCell.getActor() instanceof Skeleton)
-                && !(nextCell.getActor() instanceof Zombie);
-    }
-
     public void addInventory(Cell playerCell) {
         if(playerCell.getItem().getTileName() == "sword"){
             setAttack();
-        } else {
+        } else if (playerCell.getItem().getTileName() == "meat") {
+            increaseHealth();
+        } else if (playerCell.getItem().getTileName() == "fire") {
+            decreaseHealth();
+        }
+        else {
             items.add(playerCell.getItem().getTileName());
         }
-        //System.out.println(items);
+    }
+
+
+    public void increaseHealth(){
+        this.playerHealth += 1;
+    }
+
+    public int getPlayerHealth(){
+        return playerHealth;
+    }
+
+    public void decreaseHealth(){
+        this.playerHealth -= 1;
     }
 
     public void setAttack() {
         this.attack += 10;
     }
+
 
     public int getAttack() {
         return this.attack;

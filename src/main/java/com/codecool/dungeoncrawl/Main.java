@@ -150,7 +150,7 @@ public class Main extends Application {
                 }
             }
         }
-        healthLabel.setText("" + map.getPlayer().getHealth());
+        healthLabel.setText("" + map.getPlayer().getPlayerHealth());
         itemLabel.setText("" + map.listItems());
         attackLabel.setText("" + map.getPlayer().getAttack());
     }
