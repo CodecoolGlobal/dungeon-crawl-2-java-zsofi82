@@ -103,7 +103,7 @@ public class Main extends Application {
             } else if (monster instanceof Zombie) {
                 int[] moveCoordinates = {0, 0};
                 if (monster.getX() == 23) {
-                    moveCoordinates[0]--;
+                    moveCoordinates[0] = moveCoordinates[0] - 2;
                     monster.move(moveCoordinates[0], moveCoordinates[1]);
                 } else if (monster.getX() == 18) {
                     moveCoordinates[0]++;
