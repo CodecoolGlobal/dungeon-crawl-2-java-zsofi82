@@ -7,30 +7,40 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
-import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
+
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
+
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
+    final static int DISPLAY_SIZE = 11;
+    final static int TILE_ZOOM = 2;
     Canvas canvas = new Canvas(
+
+            DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
+            DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
+
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
 
@@ -69,7 +79,6 @@ public class Main extends Application {
         //ui.add(new Label("", button), 0, 2);
 
         BorderPane borderPane = new BorderPane();
-
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
@@ -131,20 +140,26 @@ public class Main extends Application {
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
-                Cell cell = map.getCell(x, y);
+        for (int x =0; x <DISPLAY_SIZE; x++) {
+            for (int y = 0; y < DISPLAY_SIZE; y++) {
+                int drawX = Math.min(Math.max(map.getPlayer().getX()-5, 0), map.getWidth()-DISPLAY_SIZE) + x;
+                int drawY = Math.min(Math.max(map.getPlayer().getY()-5, 0), map.getHeight()-DISPLAY_SIZE) + y;
+                Cell cell = map.getCell(drawX, drawY);
                 if (cell.getActor() != null) {
+
+                    Tiles.drawTile(context, cell.getActor(), x, y, TILE_ZOOM);
+
                     if (cell.getActor().getHealth() <= 0 &&  (cell.getActor() instanceof  Skeleton || cell.getActor() instanceof  Zombie)) {
                         map.getMonsters().remove(cell.getActor());
                         cell.setActor(null);
                     } else {
                         Tiles.drawTile(context, cell.getActor(), x, y);
                     }
+
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(),x,y);
+                    Tiles.drawTile(context, cell.getItem(),x,y, TILE_ZOOM);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x, y, TILE_ZOOM);
                     if(map.getPlayer() != null && map.getPlayer().items.contains("key") && cell.getType().equals(CellType.CLOSEDDOOR)){
                         cell.setType(CellType.OPENDOOR);
                 }

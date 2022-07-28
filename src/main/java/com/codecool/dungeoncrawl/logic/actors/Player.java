@@ -20,9 +20,19 @@ public class Player extends Actor {
     public String getTileName() {
         return "player";
     }
-    Cell playerCell = getCell();
+    //Cell playerCell = getCell();
     @Override
     public void move(int dx, int dy) {
+
+        Cell nextCell = cell.getNeighbour(dx, dy);
+        if (playerCanMove(nextCell)) {
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+            if (cell.getItem() != null) {
+                addInventory(cell);
+                cell.setItem(null);
+
         Cell nextCell = playerCell.getNeighbour(dx, dy);
         final boolean isNextCellSkeleton = nextCell.getActor() instanceof Skeleton;
         final boolean isNextCellZombie = nextCell.getActor() instanceof Zombie;
@@ -50,9 +60,10 @@ public class Player extends Actor {
                     addInventory(playerCell);
                     playerCell.setItem(null);
                 }
+
             }
         } else {
-            playerCell.setActor(this);
+            cell.setActor(this);
         }
     }
 
