@@ -23,60 +23,51 @@ public class Player extends Actor {
     //Cell playerCell = getCell();
     @Override
     public void move(int dx, int dy) {
+                Cell nextCell = cell.getNeighbour(dx, dy);
+                final boolean isNextCellSkeleton = nextCell.getActor() instanceof Skeleton;
+                final boolean isNextCellZombie = nextCell.getActor() instanceof Zombie;
+                final boolean isNextCellFloor = nextCell.getType().equals(CellType.FLOOR);
+                final boolean isNextCellOpenDoor = nextCell.getType().equals(CellType.OPENDOOR);
+                final boolean isMeat = nextCell.getType().equals(CellType.FLOOR);
+                final boolean isFire = nextCell.getType().equals(CellType.FLOOR);
 
-        Cell nextCell = cell.getNeighbour(dx, dy);
-        if (playerCanMove(nextCell)) {
-            cell.setActor(null);
-            nextCell.setActor(this);
-            cell = nextCell;
-            if (cell.getItem() != null) {
-                addInventory(cell);
-                cell.setItem(null);
+                if (isNextCellFloor || isNextCellOpenDoor || isMeat || isFire) {
+                    if (attack > 0 && (isNextCellSkeleton || isNextCellZombie)) {
+                        nextCell.getActor().setHealth(nextCell.getActor().getHealth() - attack);
+                        attack -= 5;
+                        cell.setActor(null);
+                        nextCell.setActor(this);
+                        cell = nextCell;
+                        if (cell.getItem() != null) {
+                            addInventory(cell);
+                            cell.setItem(null);
+                        }
+                    } else if (!(isNextCellSkeleton || isNextCellZombie)) {
+                        cell.setActor(null);
+                        nextCell.setActor(this);
+                        cell = nextCell;
+                        if (cell.getItem() != null) {
+                            addInventory(cell);
+                            cell.setItem(null);
+                        }
 
-        Cell nextCell = playerCell.getNeighbour(dx, dy);
-        final boolean isNextCellSkeleton = nextCell.getActor() instanceof Skeleton;
-        final boolean isNextCellZombie = nextCell.getActor() instanceof Zombie;
-        final boolean isNextCellFloor = nextCell.getType().equals(CellType.FLOOR);
-        final boolean isNextCellOpenDoor = nextCell.getType().equals(CellType.OPENDOOR);
-        final boolean isMeat = nextCell.getType().equals(CellType.FLOOR);
-        final boolean isFire = nextCell.getType().equals(CellType.FLOOR);
-
-        if (isNextCellFloor || isNextCellOpenDoor || isMeat || isFire) {
-            if (attack > 0 && (isNextCellSkeleton || isNextCellZombie)) {
-                nextCell.getActor().setHealth(nextCell.getActor().getHealth() - attack);
-                attack -= 5;
-                playerCell.setActor(null);
-                nextCell.setActor(this);
-                playerCell = nextCell;
-                if (playerCell.getItem() != null) {
-                    addInventory(playerCell);
-                    playerCell.setItem(null);
+                    }
+                } else {
+                    cell.setActor(this);
                 }
-            } else if (!(isNextCellSkeleton || isNextCellZombie)) {
-                playerCell.setActor(null);
-                nextCell.setActor(this);
-                playerCell = nextCell;
-                if (playerCell.getItem() != null) {
-                    addInventory(playerCell);
-                    playerCell.setItem(null);
-                }
-
             }
-        } else {
-            cell.setActor(this);
-        }
-    }
 
-    public void addInventory(Cell playerCell) {
-        if(playerCell.getItem().getTileName() == "sword"){
+
+    public void addInventory(Cell cell) {
+        if(cell.getItem().getTileName() == "sword"){
             setAttack();
-        } else if (playerCell.getItem().getTileName() == "meat") {
+        } else if (cell.getItem().getTileName() == "meat") {
             increaseHealth();
-        } else if (playerCell.getItem().getTileName() == "fire") {
+        } else if (cell.getItem().getTileName() == "fire") {
             decreaseHealth();
         }
         else {
-            items.add(playerCell.getItem().getTileName());
+            items.add(cell.getItem().getTileName());
         }
     }
 

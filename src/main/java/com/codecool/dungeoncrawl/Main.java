@@ -41,8 +41,7 @@ public class Main extends Application {
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
 
-            map.getWidth() * Tiles.TILE_WIDTH,
-            map.getHeight() * Tiles.TILE_WIDTH);
+
 
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
@@ -153,7 +152,7 @@ public class Main extends Application {
                         map.getMonsters().remove(cell.getActor());
                         cell.setActor(null);
                     } else {
-                        Tiles.drawTile(context, cell.getActor(), x, y);
+                        Tiles.drawTile(context, cell.getActor(), x, y,TILE_ZOOM);
                     }
 
                 } else if (cell.getItem() != null) {
