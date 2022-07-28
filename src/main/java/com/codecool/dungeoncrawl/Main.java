@@ -58,7 +58,7 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
-        ui.add(new Label("Picked up items: \n"), 0, 1);
+        ui.add(new Label("Inventory: \n"), 0, 1);
         ui.add(itemLabel, 0, 2);
         ui.add(new Label("Attack Power: "), 0,3);
         ui.add(attackLabel, 1,3);
