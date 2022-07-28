@@ -23,9 +23,20 @@ public class Player extends Actor {
     public void move(int dx, int dy) {
         Cell nextCell = playerCell.getNeighbour(dx, dy);
 
-        if ((nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR)) && !(nextCell.getActor() instanceof Skeleton)  && !(nextCell.getActor() instanceof Zombie)) {
+        if (attack > 0 && (nextCell.getActor() instanceof Skeleton)  || (nextCell.getActor() instanceof Zombie) &&  (nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR))) {
 
 
+            playerCell.setActor(null);
+            nextCell.setActor(this);
+            playerCell = nextCell;
+            if (playerCell.getItem() != null) {
+                addInventory(playerCell);
+                playerCell.setItem(null);
+            }
+
+        }else if((nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR)) && !(nextCell.getActor() instanceof Skeleton)  && !(nextCell.getActor() instanceof Zombie)){
+
+                System.out.println("hello:)");
             playerCell.setActor(null);
             nextCell.setActor(this);
             playerCell = nextCell;
