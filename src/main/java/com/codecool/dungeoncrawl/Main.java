@@ -8,8 +8,16 @@ import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,8 +37,13 @@ public class Main extends Application {
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
     Canvas canvas = new Canvas(
+
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
+
+            map.getWidth() * Tiles.TILE_WIDTH,
+            map.getHeight() * Tiles.TILE_WIDTH);
+
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label itemLabel = new Label();
@@ -69,6 +82,7 @@ public class Main extends Application {
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
+
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
@@ -76,6 +90,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -98,10 +113,14 @@ public class Main extends Application {
                 break;
         }
 
+
         map.getMonsters().forEach(monster -> {
             if (monster instanceof Skeleton) {
                 int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
                 monster.move(coordinates[0], coordinates[1]);
+
+                
+
             } else if (monster instanceof Zombie) {
                 int[] moveCoordinates = {0, 0};
                 if (monster.getX() == 23) {
@@ -113,6 +132,7 @@ public class Main extends Application {
                 }
                 moveCoordinates[0]++;
                 monster.move(moveCoordinates[0], moveCoordinates[1]);
+
             }
         });
     }
@@ -126,7 +146,16 @@ public class Main extends Application {
                 int drawY = Math.min(Math.max(map.getPlayer().getY()-5, 0), map.getHeight()-DISPLAY_SIZE) + y;
                 Cell cell = map.getCell(drawX, drawY);
                 if (cell.getActor() != null) {
+
                     Tiles.drawTile(context, cell.getActor(), x, y, TILE_ZOOM);
+
+                    if (cell.getActor().getHealth() <= 0 &&  (cell.getActor() instanceof  Skeleton || cell.getActor() instanceof  Zombie)) {
+                        map.getMonsters().remove(cell.getActor());
+                        cell.setActor(null);
+                    } else {
+                        Tiles.drawTile(context, cell.getActor(), x, y);
+                    }
+
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(),x,y, TILE_ZOOM);
                 } else {
@@ -136,7 +165,7 @@ public class Main extends Application {
                 }
             }
         }
-        healthLabel.setText("" + map.getPlayer().getHealth());
+        healthLabel.setText("" + map.getPlayer().getPlayerHealth());
         itemLabel.setText("" + map.listItems());
         attackLabel.setText("" + map.getPlayer().getAttack());
     }
