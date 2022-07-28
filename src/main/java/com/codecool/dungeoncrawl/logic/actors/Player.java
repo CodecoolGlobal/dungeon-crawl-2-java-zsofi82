@@ -22,10 +22,7 @@ public class Player extends Actor {
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = playerCell.getNeighbour(dx, dy);
-
-        if ((nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR)) && !(nextCell.getActor() instanceof Skeleton)  && !(nextCell.getActor() instanceof Zombie)) {
-
-
+        if (playerCanMove(nextCell)) {
             playerCell.setActor(null);
             nextCell.setActor(this);
             playerCell = nextCell;
@@ -38,6 +35,13 @@ public class Player extends Actor {
         }
     }
 
+    private boolean playerCanMove(Cell nextCell) {
+        return (nextCell.getType().equals(CellType.FLOOR)
+                || nextCell.getType().equals(CellType.OPENDOOR))
+                && !(nextCell.getActor() instanceof Skeleton)
+                && !(nextCell.getActor() instanceof Zombie);
+    }
+
     public void addInventory(Cell playerCell) {
         if(playerCell.getItem().getTileName() == "sword"){
             setAttack();
@@ -47,6 +51,7 @@ public class Player extends Actor {
         System.out.println(items);
     }
 
+
     public void setAttack() {
         this.attack += 10;
     }
@@ -54,4 +59,5 @@ public class Player extends Actor {
     public int getAttack() {
         return this.attack;
     }
+
 }

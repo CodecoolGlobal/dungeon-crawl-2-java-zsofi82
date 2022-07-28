@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -96,6 +97,16 @@ public class Main extends Application {
                 refresh();
                 break;
         }
+        System.out.println(map.getMonsters());
+
+        map.getMonsters().forEach(monster -> {
+            if (monster instanceof Skeleton) {
+                int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
+                monster.move(coordinates[0], coordinates[1]);
+                System.out.println(coordinates[0] + ", " + coordinates[1]);
+            }
+        });
+
     }
 
 
