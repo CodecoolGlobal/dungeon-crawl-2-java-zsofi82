@@ -13,8 +13,8 @@ public class Skeleton extends Actor {
 
     public int[] generateRandomCoordinate() {
         Random random = new Random();
-        int randomX = random.nextInt(3)-1 + getCell().getX();
-        int randomY = random.nextInt(3)-1 + getCell().getY();
+        int randomX = random.nextInt(3)-1;
+        int randomY = random.nextInt(3)-1;
         return new int[] {randomX, randomY};
     }
 
