@@ -49,6 +49,13 @@ public class Player extends Actor {
         }
     }
 
+    private boolean playerCanMove(Cell nextCell) {
+        return (nextCell.getType().equals(CellType.FLOOR)
+                || nextCell.getType().equals(CellType.OPENDOOR))
+                && !(nextCell.getActor() instanceof Skeleton)
+                && !(nextCell.getActor() instanceof Zombie);
+    }
+
     public void addInventory(Cell playerCell) {
         if(playerCell.getItem().getTileName() == "sword"){
             setAttack();
