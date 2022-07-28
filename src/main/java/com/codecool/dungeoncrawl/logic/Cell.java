@@ -11,7 +11,7 @@ public class Cell implements Drawable {
 
     private Item item;
 
-    Cell(GameMap gameMap, int x, int y, CellType type) {
+    public Cell(GameMap gameMap, int x, int y, CellType type) {
         this.gameMap = gameMap;
         this.x = x;
         this.y = y;
@@ -43,7 +43,6 @@ public class Cell implements Drawable {
     }
 
     public Cell getNeighbour(int dx, int dy) {
-        System.out.println(x + dx);
         return gameMap.getCell(x + dx, y + dy);
     }
 
