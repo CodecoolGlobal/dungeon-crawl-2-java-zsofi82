@@ -61,7 +61,7 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
-        ui.add(new Label("Picked up items: \n"), 0, 1);
+        ui.add(new Label("Inventory: \n"), 0, 1);
         ui.add(itemLabel, 0, 2);
         ui.add(new Label("Attack Power: "), 0,3);
         ui.add(attackLabel, 1,3);
@@ -103,18 +103,30 @@ public class Main extends Application {
                 refresh();
                 break;
         }
-        //System.out.println(map.getMonsters());
+
 
         map.getMonsters().forEach(monster -> {
             if (monster instanceof Skeleton) {
                 int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
                 monster.move(coordinates[0], coordinates[1]);
-                //System.out.println(coordinates[0] + ", " + coordinates[1]);
+
+                
+
+            } else if (monster instanceof Zombie) {
+                int[] moveCoordinates = {0, 0};
+                if (monster.getX() == 23) {
+                    moveCoordinates[0] = moveCoordinates[0] - 2;
+                    monster.move(moveCoordinates[0], moveCoordinates[1]);
+                } else if (monster.getX() == 18) {
+                    moveCoordinates[0]++;
+                    monster.move(moveCoordinates[0], moveCoordinates[1]);
+                }
+                moveCoordinates[0]++;
+                monster.move(moveCoordinates[0], moveCoordinates[1]);
+
             }
         });
-
     }
-
 
     private void refresh() {
         context.setFill(Color.BLACK);
