@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Player extends Actor {
     public List<String> items = new ArrayList<>();
+
+    public int attack = 0;
     public Player(Cell cell) {
         super(cell);
     }
@@ -41,8 +43,21 @@ public class Player extends Actor {
     }
 
     public void addInventory(Cell playerCell) {
-        items.add(playerCell.getItem().getTileName());
+        if(playerCell.getItem().getTileName() == "sword"){
+            setAttack();
+        } else {
+            items.add(playerCell.getItem().getTileName());
+        }
         System.out.println(items);
+    }
+
+
+    public void setAttack() {
+        this.attack += 10;
+    }
+
+    public int getAttack() {
+        return this.attack;
     }
 
 }
