@@ -32,6 +32,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label itemLabel = new Label();
+    Label attackLabel = new Label();
 
     public static void main(String[] args) {
         launch(args);
@@ -57,6 +58,8 @@ public class Main extends Application {
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Picked up items: \n"), 0, 1);
         ui.add(itemLabel, 0, 2);
+        ui.add(new Label("Attack Power: "), 0,3);
+        ui.add(attackLabel, 1,3);
 
         //ui.add(new Label("", button), 0, 2);
 
@@ -115,6 +118,7 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         itemLabel.setText("" + map.listItems());
+        attackLabel.setText("" + map.getPlayer().getAttack());
     }
 
 }}
