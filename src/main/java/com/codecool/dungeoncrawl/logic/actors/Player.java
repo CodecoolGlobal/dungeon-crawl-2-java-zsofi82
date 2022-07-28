@@ -90,4 +90,8 @@ public class Player extends Actor {
     public int getAttack() {
         return this.attack;
     }
+
+    public int getHealth(){
+        return this.playerHealth;
+    }
 }
