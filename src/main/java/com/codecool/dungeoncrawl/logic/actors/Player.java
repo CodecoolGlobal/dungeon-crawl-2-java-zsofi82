@@ -22,27 +22,30 @@ public class Player extends Actor {
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = playerCell.getNeighbour(dx, dy);
+        final boolean isNextCellSkeleton = nextCell.getActor() instanceof Skeleton;
+        final boolean isNextCellZombie = nextCell.getActor() instanceof Zombie;
+        final boolean isNextCellFloor = nextCell.getType().equals(CellType.FLOOR);
+        final boolean isNextCellOpenDoor = nextCell.getType().equals(CellType.OPENDOOR);
 
-        if (attack > 0 && (nextCell.getActor() instanceof Skeleton)  || (nextCell.getActor() instanceof Zombie) &&  (nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR))) {
-
-
-            playerCell.setActor(null);
-            nextCell.setActor(this);
-            playerCell = nextCell;
-            if (playerCell.getItem() != null) {
-                addInventory(playerCell);
-                playerCell.setItem(null);
-            }
-
-        }else if((nextCell.getType().equals(CellType.FLOOR) || nextCell.getType().equals(CellType.OPENDOOR)) && !(nextCell.getActor() instanceof Skeleton)  && !(nextCell.getActor() instanceof Zombie)){
-
-                System.out.println("hello:)");
-            playerCell.setActor(null);
-            nextCell.setActor(this);
-            playerCell = nextCell;
-            if (playerCell.getItem() != null) {
-                addInventory(playerCell);
-                playerCell.setItem(null);
+        if (isNextCellFloor || isNextCellOpenDoor) {
+            if (attack > 0 && (isNextCellSkeleton || isNextCellZombie)) {
+                nextCell.getActor().setHealth(nextCell.getActor().getHealth() - attack);
+                attack -= 5;
+                playerCell.setActor(null);
+                nextCell.setActor(this);
+                playerCell = nextCell;
+                if (playerCell.getItem() != null) {
+                    addInventory(playerCell);
+                    playerCell.setItem(null);
+                }
+            } else if (!(isNextCellSkeleton || isNextCellZombie)) {
+                playerCell.setActor(null);
+                nextCell.setActor(this);
+                playerCell = nextCell;
+                if (playerCell.getItem() != null) {
+                    addInventory(playerCell);
+                    playerCell.setItem(null);
+                }
             }
         } else {
             playerCell.setActor(this);
@@ -62,7 +65,7 @@ public class Player extends Actor {
         } else {
             items.add(playerCell.getItem().getTileName());
         }
-        System.out.println(items);
+        //System.out.println(items);
     }
 
     public void setAttack() {
