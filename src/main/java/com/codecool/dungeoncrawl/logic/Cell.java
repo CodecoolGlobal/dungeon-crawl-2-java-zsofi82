@@ -6,8 +6,9 @@ import com.codecool.dungeoncrawl.logic.items.Item;
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
-    private GameMap gameMap;
-    private int x, y;
+    private final GameMap gameMap;
+    private final int x;
+    private final int y;
 
     private Item item;
 
@@ -43,7 +44,6 @@ public class Cell implements Drawable {
     }
 
     public Cell getNeighbour(int dx, int dy) {
-
         return gameMap.getCell(x + dx, y + dy);
     }
 
