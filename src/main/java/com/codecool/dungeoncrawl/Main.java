@@ -4,20 +4,11 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
+
 import javafx.application.Application;
-
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,22 +17,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
-
-import java.awt.*;
-
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
     Canvas canvas = new Canvas(
-
-            DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
-            DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
-
-
+    DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
+    DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
 
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
@@ -51,7 +35,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
@@ -81,7 +64,6 @@ public class Main extends Application {
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
-
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
@@ -89,7 +71,6 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -112,14 +93,10 @@ public class Main extends Application {
                 break;
         }
 
-
         map.getMonsters().forEach(monster -> {
             if (monster instanceof Skeleton) {
                 int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
                 monster.move(coordinates[0], coordinates[1]);
-
-                
-
             } else if (monster instanceof Zombie) {
                 int[] moveCoordinates = {0, 0};
                 if (monster.getX() == 23) {
@@ -131,7 +108,6 @@ public class Main extends Application {
                 }
                 moveCoordinates[0]++;
                 monster.move(moveCoordinates[0], moveCoordinates[1]);
-
             }
         });
     }
@@ -145,28 +121,25 @@ public class Main extends Application {
                 int drawY = Math.min(Math.max(map.getPlayer().getY()-5, 0), map.getHeight()-DISPLAY_SIZE) + y;
                 Cell cell = map.getCell(drawX, drawY);
                 if (cell.getActor() != null) {
-
                     Tiles.drawTile(context, cell.getActor(), x, y, TILE_ZOOM);
-
                     if (cell.getActor().getHealth() <= 0 &&  (cell.getActor() instanceof  Skeleton || cell.getActor() instanceof  Zombie)) {
                         map.getMonsters().remove(cell.getActor());
                         cell.setActor(null);
                     } else {
                         Tiles.drawTile(context, cell.getActor(), x, y,TILE_ZOOM);
                     }
-
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(),x,y, TILE_ZOOM);
                 } else {
                     Tiles.drawTile(context, cell, x, y, TILE_ZOOM);
                     if(map.getPlayer() != null && map.getPlayer().items.contains("key") && cell.getType().equals(CellType.CLOSEDDOOR)){
                         cell.setType(CellType.OPENDOOR);
+                    }
                 }
             }
-        }
         healthLabel.setText("" + map.getPlayer().getPlayerHealth());
         itemLabel.setText("" + map.listItems());
         attackLabel.setText("" + map.getPlayer().getAttack());
+        }
     }
-
-}}
+}

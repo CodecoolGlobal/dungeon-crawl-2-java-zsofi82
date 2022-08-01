@@ -8,7 +8,6 @@ public abstract class Actor implements Drawable {
     protected Cell cell;
     private int health = 5;
 
-
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
@@ -42,6 +41,4 @@ public abstract class Actor implements Drawable {
     public int getY() {
         return cell.getY();
     }
-
-
 }

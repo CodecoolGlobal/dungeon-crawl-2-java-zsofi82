@@ -1,6 +1,5 @@
 package com.codecool.dungeoncrawl.logic;
 
-
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.logic.items.Fire;
 import com.codecool.dungeoncrawl.logic.items.Key;
@@ -39,7 +38,7 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            map.monsters.add(new Skeleton(cell));
+                            map.getMonsters().add(new Skeleton(cell));
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
@@ -47,7 +46,7 @@ public class MapLoader {
                             break;
                         case 'z':
                             cell.setType(CellType.FLOOR);
-                            map.monsters.add(new Zombie(cell));
+                            map.getMonsters().add(new Zombie(cell));
                             break;
                         case 'S':
                             cell.setType(CellType.FLOOR);
@@ -76,5 +75,4 @@ public class MapLoader {
         }
         return map;
     }
-
 }
