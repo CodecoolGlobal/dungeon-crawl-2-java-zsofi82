@@ -2,6 +2,7 @@ package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.items.Key;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,12 +11,15 @@ public class PlayerTest {
     GameMap gameMap;
     Player player;
     Skeleton enemy;
+    Key key;
 
     @BeforeEach
     void initGame() {
         this.gameMap = new GameMap(3, 3, CellType.FLOOR);
         this.player = new Player(gameMap.getCell(1, 1));
         this.enemy = new Skeleton(gameMap.getCell(0,1));
+        this.key = new Key(gameMap.getCell(1, 2));
+        gameMap.getCell(1, 2).setItem(key);
     }
 
     @Test
@@ -60,5 +64,13 @@ public class PlayerTest {
         player.move(-1, 0);
 
         assertEquals(-5, enemy.getHealth());
+    }
+
+    @Test
+    void movePicksUpItem() {
+        player.move(0, 1);
+
+        assertNull(gameMap.getCell(1, 2).getItem());
+        assertTrue(player.items.contains("key"));
     }
 }
