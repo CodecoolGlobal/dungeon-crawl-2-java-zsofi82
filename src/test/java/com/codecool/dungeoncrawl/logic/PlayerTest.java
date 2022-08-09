@@ -1,0 +1,64 @@
+package com.codecool.dungeoncrawl.logic;
+
+import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PlayerTest {
+    GameMap gameMap;
+    Player player;
+    Skeleton enemy;
+
+    @BeforeEach
+    void initGame() {
+        this.gameMap = new GameMap(3, 3, CellType.FLOOR);
+        this.player = new Player(gameMap.getCell(1, 1));
+        this.enemy = new Skeleton(gameMap.getCell(0,1));
+    }
+
+    @Test
+    void moveUpdatesCellAndPlayer() {
+        player.move(0, 1);
+
+        assertEquals(1, player.getX());
+        assertEquals(2, player.getY());
+        assertNull(gameMap.getCell(1, 1).getActor());
+        assertEquals(player, gameMap.getCell(1, 2).getActor());
+    }
+
+    @Test
+    void moveLeavesPlayerUnchangedWhenMovingToWall() {
+        gameMap.getCell(2, 1).setType(CellType.WALL);
+        player.move(1, 0);
+
+        assertEquals(1, player.getX());
+        assertEquals(1, player.getY());
+    }
+
+    @Test
+    void moveLeavesPlayerUnchangedWhenMovingOutOfMap() {
+        player.move(1, 0);
+        player.move(1, 0);
+
+        assertEquals(2, player.getX());
+        assertEquals(1, player.getY());
+    }
+
+    @Test
+    void moveLeavesPlayerUnchangedWhenMovingIntoActor() {
+        player.move(-1, 0);
+
+        assertEquals(1, player.getX());
+        assertEquals(1, player.getY());
+    }
+
+    @Test
+    void moveAttacksActorWhenMovingIntoActor() {
+        player.setAttack();
+        player.move(-1, 0);
+
+        assertEquals(-5, enemy.getHealth());
+    }
+}
