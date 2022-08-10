@@ -5,9 +5,12 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
+import com.codecool.dungeoncrawl.logic.items.Fire;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -28,7 +31,6 @@ import java.sql.SQLException;
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Canvas canvas = new Canvas(
-
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
     GraphicsContext context = canvas.getGraphicsContext2D();
@@ -47,7 +49,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
-
         GridPane ui = new GridPane();
 
 
