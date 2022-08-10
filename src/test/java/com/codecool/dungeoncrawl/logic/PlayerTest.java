@@ -73,4 +73,12 @@ public class PlayerTest {
         assertNull(gameMap.getCell(1, 2).getItem());
         assertTrue(player.items.contains("key"));
     }
+
+    @Test
+    void addInventoryOnCellWithNoItemThrowsNullpointer() {
+        assertThrows(
+            NullPointerException.class,
+            () -> player.addInventory(gameMap.getCell(1, 1))
+        );
+    }
 }
