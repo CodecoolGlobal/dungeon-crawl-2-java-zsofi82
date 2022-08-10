@@ -44,6 +44,7 @@ public class Main extends Application {
 
     Label itemLabel = new Label();
     Label attackLabel = new Label();
+    SavePopup savePopup;
     GameDatabaseManager dbManager;
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
@@ -55,6 +56,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
+
+        savePopup = new SavePopup(primaryStage);
+
         GridPane ui = new GridPane();
 
         ui.setPrefWidth(200);
@@ -116,45 +120,8 @@ public class Main extends Application {
                 KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_ANY);
                 if (saveCombinationWin.match(keyEvent)
                         || saveCombinationMac.match(keyEvent)) {
-                    Stage stage = new Stage();
-
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.initModality(Modality.WINDOW_MODAL);
-                    //stage.initModality(Modality.NONE);
-                    stage.setX(400);
-                    stage.setY(300);
-                    stage.setWidth(300);
-                    stage.setHeight(100);
-
-                    stage.setTitle("Save the game");
-
-                    Label label1 = new Label("Name:");
-                    TextField textField1 = new TextField ();
-                    HBox hb = new HBox();
-                    hb.getChildren().addAll(label1, textField1);
-                    hb.setSpacing(10);
-
-                    TextField textField = new TextField("name");
-                    System.out.println("\n");
-
-                    TilePane r = new TilePane();
-
-                    Button saveButton = new Button("Save");
-                    Button cancelButton = new Button("Cancel");
-                    saveButton.setOnAction(action -> {
-                        System.out.println(textField.getText());
-                    });
-
-
-                    HBox hbox = new HBox(textField, saveButton, cancelButton);
-//                    Button d = new Button("Save");
-//
-                    Scene sc = new Scene(hbox, 500, 300);
-                    stage.setScene(sc);
-//
-//                    r.getChildren().add(d);
-                    stage.initStyle(StageStyle.DECORATED);
-                    stage.showAndWait();
+                    savePopup.show();
+                    System.out.println("finished");
                 }
         }
 
