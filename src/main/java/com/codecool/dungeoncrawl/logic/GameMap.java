@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameMap {

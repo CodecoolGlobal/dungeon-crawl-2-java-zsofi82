@@ -3,7 +3,9 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
-public abstract class Actor implements Drawable {
+import java.io.Serializable;
+
+public abstract class Actor implements Drawable{
 
     protected Cell cell;
     private int health = 5;

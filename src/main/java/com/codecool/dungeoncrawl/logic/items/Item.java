@@ -5,6 +5,10 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Item implements Drawable {
     Cell cell;
+
+    private int x;
+
+    private int y;
     public Item(Cell cell) {
         this.cell = cell;
     }
@@ -12,4 +16,11 @@ public abstract class Item implements Drawable {
         return cell;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
