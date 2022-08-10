@@ -107,4 +107,7 @@ public class Player extends Actor {
     public int getHealth(){
         return this.playerHealth;
     }
+
+    @Override
+    public void act() {}
 }
