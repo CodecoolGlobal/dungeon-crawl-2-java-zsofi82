@@ -5,23 +5,31 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.SQLException;
 
@@ -47,9 +55,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
-
         GridPane ui = new GridPane();
-
 
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -61,11 +67,9 @@ public class Main extends Application {
         ui.add(new Label("Attack Power: "), 0, 3);
         ui.add(attackLabel, 1, 3);
 
-
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
-
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -75,7 +79,6 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-
 
     }
 
@@ -88,7 +91,6 @@ public class Main extends Application {
             exit();
         }
     }
-
 
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -109,6 +111,51 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
                 refresh();
                 break;
+            case S:
+                KeyCombination saveCombinationWin = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_ANY);
+                KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_ANY);
+                if (saveCombinationWin.match(keyEvent)
+                        || saveCombinationMac.match(keyEvent)) {
+                    Stage stage = new Stage();
+
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.initModality(Modality.WINDOW_MODAL);
+                    //stage.initModality(Modality.NONE);
+                    stage.setX(400);
+                    stage.setY(300);
+                    stage.setWidth(300);
+                    stage.setHeight(100);
+
+                    stage.setTitle("Save the game");
+
+                    Label label1 = new Label("Name:");
+                    TextField textField1 = new TextField ();
+                    HBox hb = new HBox();
+                    hb.getChildren().addAll(label1, textField1);
+                    hb.setSpacing(10);
+
+                    TextField textField = new TextField("name");
+                    System.out.println("\n");
+
+                    TilePane r = new TilePane();
+
+                    Button saveButton = new Button("Save");
+                    Button cancelButton = new Button("Cancel");
+                    saveButton.setOnAction(action -> {
+                        System.out.println(textField.getText());
+                    });
+
+
+                    HBox hbox = new HBox(textField, saveButton, cancelButton);
+//                    Button d = new Button("Save");
+//
+                    Scene sc = new Scene(hbox, 500, 300);
+                    stage.setScene(sc);
+//
+//                    r.getChildren().add(d);
+                    stage.initStyle(StageStyle.DECORATED);
+                    stage.showAndWait();
+                }
         }
 
 
@@ -116,7 +163,6 @@ public class Main extends Application {
             if (monster instanceof Skeleton) {
                 int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
                 monster.move(coordinates[0], coordinates[1]);
-
 
             } else if (monster instanceof Zombie) {
                 int[] moveCoordinates = {0, 0};
@@ -129,7 +175,6 @@ public class Main extends Application {
                 }
                 moveCoordinates[0]++;
                 monster.move(moveCoordinates[0], moveCoordinates[1]);
-
             }
         });
     }
