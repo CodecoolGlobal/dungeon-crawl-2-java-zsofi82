@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 
 public class Zombie extends Actor{
@@ -14,10 +15,10 @@ public class Zombie extends Actor{
 
     @Override
     public void act() {
-        if (getX() == 23) {
-            dx = -1;
-        } else if (getX() == 18) {
-            dx = 1;
+        Cell destination = cell.getNeighbour(dx, dy);
+
+        if (destination.getType() == CellType.WALL) {
+            dx = dx * -1;
         }
         if (actorCanMove(cell.getNeighbour(dx, dy))) {
             move(dx, dy);
