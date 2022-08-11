@@ -1,4 +1,4 @@
-package com.codecool.dungeoncrawl;
+package com.codecool.dungeoncrawl.ui;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
