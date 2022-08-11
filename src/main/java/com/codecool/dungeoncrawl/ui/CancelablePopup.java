@@ -13,8 +13,8 @@ public abstract class CancelablePopup extends MyPopup {
 
     @Override
     public void show() {
-        super.show();
         canceled = false;
+        super.show();
     }
 
     public boolean isCanceled() {
