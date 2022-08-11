@@ -27,4 +27,19 @@ public class SkeletonTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    public void moveSkeletonOneStepIfCanMove() {
+        int starterX = skeleton.getX();
+        int starterY = skeleton.getY();
+        skeleton.act();
+
+        boolean expected = true;
+        boolean result = starterX == skeleton.getX()+1 ||
+                starterY == skeleton.getY()+1 ||
+                starterX == skeleton.getX()-1 ||
+                starterY == skeleton.getY()-1;
+
+        assertEquals(expected, result);
+    }
 }
