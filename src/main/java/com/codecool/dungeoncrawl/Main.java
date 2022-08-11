@@ -28,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -143,6 +144,24 @@ public class Main extends Application {
                         try {
                             new Transfer().toJson(map, inputPopup.getInput());
                         } catch (IOException | JsonIOException e) {
+                            e.printStackTrace();
+                            errorPopup.show(e.getMessage());
+                        }
+                    }
+                }
+                break;
+            case I:
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
+                    inputPopup.show(
+                        "Import game",
+                        "Import",
+                        "Cancel",
+                        "Filename:"
+                    );
+                    if (!inputPopup.isCanceled()) {
+                        try {
+                            map = new Transfer().fromJson(inputPopup.getInput());
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                             errorPopup.show(e.getMessage());
                         }
