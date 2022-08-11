@@ -12,6 +12,7 @@ import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.ItemModel;
+import com.codecool.dungeoncrawl.ui.ExportPopup;
 import com.codecool.dungeoncrawl.ui.SavePopup;
 import com.codecool.dungeoncrawl.logic.items.Fire;
 import com.codecool.dungeoncrawl.model.PlayerModel;
@@ -48,6 +49,7 @@ public class Main extends Application {
     Label itemLabel = new Label();
     Label attackLabel = new Label();
     SavePopup savePopup;
+    ExportPopup exportPopup;
     GameDatabaseManager dbManager;
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
@@ -61,6 +63,7 @@ public class Main extends Application {
         setupDbManager();
 
         savePopup = new SavePopup(primaryStage);
+        exportPopup = new ExportPopup(primaryStage);
 
         GridPane ui = new GridPane();
 
@@ -124,6 +127,14 @@ public class Main extends Application {
                     savePopup.show();
                     if (!savePopup.isCanceled()) {
                         saveGame(savePopup.getInput());
+                    }
+                }
+                break;
+            case E:
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
+                    exportPopup.show();
+                    if (!exportPopup.isCanceled()) {
+                        new Transfer().toJson(map, exportPopup.getInput());
                     }
                 }
         }
