@@ -12,6 +12,7 @@ import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.ui.ExportPopup;
 import com.codecool.dungeoncrawl.ui.SavePopup;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.JsonIOException;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -128,7 +130,13 @@ public class Main extends Application {
                 if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
                     exportPopup.show();
                     if (!exportPopup.isCanceled()) {
-                        new Transfer().toJson(map, exportPopup.getInput());
+                        try {
+                            new Transfer().toJson(map, exportPopup.getInput());
+                        } catch (IOException e) {
+                            System.out.println("hihi");
+                        } catch (JsonIOException e) {
+                            System.out.println("haha");
+                        }
                     }
                 }
         }
