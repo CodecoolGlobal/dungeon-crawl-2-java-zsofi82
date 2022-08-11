@@ -10,11 +10,10 @@ public abstract class MyPopup {
     protected VBox mainContainer;
     protected Scene scene;
 
-    protected MyPopup(Stage parentWindow, String title) {
+    protected MyPopup(Stage parentWindow) {
         this.parentWindow = parentWindow;
         window = new Stage();
         window.initOwner(parentWindow);
-        window.setTitle(title);
         window.initModality(Modality.APPLICATION_MODAL);
         mainContainer = new VBox();
         scene = new Scene(mainContainer);
@@ -24,6 +23,4 @@ public abstract class MyPopup {
     public void show() {
         window.showAndWait();
     }
-
-    public abstract String getInput();
 }

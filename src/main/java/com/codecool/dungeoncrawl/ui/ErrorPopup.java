@@ -9,7 +9,8 @@ public class ErrorPopup extends MyPopup {
     Label messageLabel;
 
     public ErrorPopup(Stage parentWindow) {
-        super(parentWindow, "Error");
+        super(parentWindow);
+        window.setTitle("Error");
 
         OKButton = new Button("OK");
         OKButton.setOnAction(event -> window.close());
@@ -24,8 +25,4 @@ public class ErrorPopup extends MyPopup {
         super.show();
     }
 
-    @Override
-    public String getInput() {
-        return null;
-    }
 }

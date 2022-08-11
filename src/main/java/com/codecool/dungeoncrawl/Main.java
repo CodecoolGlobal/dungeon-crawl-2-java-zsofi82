@@ -10,8 +10,7 @@ import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.ui.ErrorPopup;
-import com.codecool.dungeoncrawl.ui.ExportPopup;
-import com.codecool.dungeoncrawl.ui.SavePopup;
+import com.codecool.dungeoncrawl.ui.InputPopup;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.JsonIOException;
 import javafx.application.Application;
@@ -45,9 +44,8 @@ public class Main extends Application {
 
     Label itemLabel = new Label();
     Label attackLabel = new Label();
-    SavePopup savePopup;
-    ExportPopup exportPopup;
     ErrorPopup errorPopup;
+    InputPopup inputPopup;
     GameDatabaseManager dbManager;
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
@@ -60,9 +58,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
 
-        savePopup = new SavePopup(primaryStage);
-        exportPopup = new ExportPopup(primaryStage);
         errorPopup = new ErrorPopup(primaryStage);
+        inputPopup = new InputPopup(primaryStage);
 
         GridPane ui = new GridPane();
 
@@ -123,18 +120,28 @@ public class Main extends Application {
                 break;
             case S:
                 if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
-                    savePopup.show();
-                    if (!savePopup.isCanceled()) {
-                        saveGame(savePopup.getInput());
+                    inputPopup.show(
+                        "Save game",
+                        "Save",
+                        "Cancel",
+                        "User name:"
+                    );
+                    if (!inputPopup.isCanceled()) {
+                        saveGame(inputPopup.getInput());
                     }
                 }
                 break;
             case E:
                 if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
-                    exportPopup.show();
-                    if (!exportPopup.isCanceled()) {
+                    inputPopup.show(
+                        "Export game",
+                        "Export",
+                        "Cancel",
+                        "Filename:"
+                    );
+                    if (!inputPopup.isCanceled()) {
                         try {
-                            new Transfer().toJson(map, exportPopup.getInput());
+                            new Transfer().toJson(map, inputPopup.getInput());
                         } catch (IOException | JsonIOException e) {
                             e.printStackTrace();
                             errorPopup.show(e.getMessage());
