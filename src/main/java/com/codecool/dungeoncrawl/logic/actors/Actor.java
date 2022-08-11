@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public abstract class Actor implements Drawable{
 
-    protected Cell cell;
+    protected transient Cell cell;
     private int health = 5;
 
 
