@@ -1,28 +1,21 @@
 package com.codecool.dungeoncrawl.ui;
 
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-
-import javafx.scene.Scene;
-import javafx.event.EventHandler;
 import javafx.stage.*;
 
-public class SavePopup extends MyPopup {
+public class SavePopup extends CancelablePopup {
     Button saveButton, cancelButton;
     TextField usernameInput;
     Label inputLabel;
     HBox buttonBox, inputBox;
-    boolean canceled;
 
     public SavePopup(Stage parentWindow) {
         super(parentWindow, "Save");
-
-        canceled = false;
 
         saveButton = new Button("Save");
         saveButton.setOnAction(event -> close(false));
@@ -48,22 +41,7 @@ public class SavePopup extends MyPopup {
     }
 
     @Override
-    public void show() {
-        super.show();
-        canceled = false;
-    }
-
-    @Override
     public String getInput() {
         return usernameInput.getText();
-    }
-
-    public boolean isCanceled() {
-        return canceled;
-    }
-
-    private void close(boolean wasCanceled) {
-        canceled = wasCanceled;
-        window.close();
     }
 }
