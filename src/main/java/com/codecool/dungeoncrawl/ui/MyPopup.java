@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 public abstract class MyPopup {
     protected Stage parentWindow, window;
     protected VBox mainContainer;
+    protected Scene scene;
 
     protected MyPopup(Stage parentWindow, String title) {
         this.parentWindow = parentWindow;
@@ -16,12 +17,11 @@ public abstract class MyPopup {
         window.setTitle(title);
         window.initModality(Modality.APPLICATION_MODAL);
         mainContainer = new VBox();
+        scene = new Scene(mainContainer);
+        window.setScene(scene);
     }
 
     public void show() {
-        Scene scene = new Scene(mainContainer);
-        window.setScene(scene);
-
         window.showAndWait();
     }
 

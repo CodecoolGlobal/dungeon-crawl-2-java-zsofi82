@@ -17,12 +17,17 @@ public class SavePopup extends MyPopup {
     TextField usernameInput;
     Label inputLabel;
     HBox buttonBox, inputBox;
+    boolean canceled;
 
     public SavePopup(Stage parentWindow) {
         super(parentWindow, "Save");
 
+        canceled = false;
+
         saveButton = new Button("Save");
+        saveButton.setOnAction(event -> close(false));
         cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(event -> close(true));
         usernameInput = new TextField();
         inputLabel = new Label("User name:");
         inputLabel.setLabelFor(usernameInput);
@@ -43,7 +48,22 @@ public class SavePopup extends MyPopup {
     }
 
     @Override
+    public void show() {
+        super.show();
+        canceled = false;
+    }
+
+    @Override
     public String getInput() {
         return usernameInput.getText();
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    private void close(boolean wasCanceled) {
+        canceled = wasCanceled;
+        window.close();
     }
 }
