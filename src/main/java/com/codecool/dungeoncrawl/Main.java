@@ -9,6 +9,10 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.ItemModel;
+import com.codecool.dungeoncrawl.ui.SavePopup;
 import com.codecool.dungeoncrawl.logic.items.Fire;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
@@ -26,7 +30,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -38,6 +47,7 @@ public class Main extends Application {
 
     Label itemLabel = new Label();
     Label attackLabel = new Label();
+    SavePopup savePopup;
     GameDatabaseManager dbManager;
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
@@ -49,6 +59,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
+
+        savePopup = new SavePopup(primaryStage);
+
         GridPane ui = new GridPane();
 
 
@@ -61,7 +74,6 @@ public class Main extends Application {
         ui.add(itemLabel, 0, 2);
         ui.add(new Label("Attack Power: "), 0, 3);
         ui.add(attackLabel, 1, 3);
-
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
@@ -77,7 +89,6 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
 
-
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -89,8 +100,6 @@ public class Main extends Application {
             exit();
         }
     }
-
-
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
@@ -110,8 +119,34 @@ public class Main extends Application {
                 map.getPlayer().move(1, 0);
                 refresh();
                 break;
+            case S:
+                KeyCombination saveCombinationWin = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_ANY);
+                KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_ANY);
+                if (saveCombinationWin.match(keyEvent)
+                        || saveCombinationMac.match(keyEvent)) {
+                    savePopup.show();
+                    if (!savePopup.isCanceled()) {
+                        saveGame(savePopup.getInput());
+                    }
+                }
         }
         map.getMonsters().forEach(Actor::act);
+    }
+
+    private void saveGame(String playerName) {
+        map.getPlayer().setName(playerName);
+        PlayerModel player = new PlayerModel(map.getPlayer());
+        GameState gameState = new GameState(
+            "map.txt",
+            new Date(LocalDate.now().toEpochDay()),
+            player
+        );
+        dbManager.saveGameState(gameState);
+        dbManager.savePlayer(map.getPlayer(), gameState.getId());
+        map.getMonsters().forEach(monster -> dbManager.saveMonsters(monster, gameState.getId()));
+        map.getItems()
+            .filter(Objects::nonNull)
+            .forEach(item -> dbManager.saveItems(item, gameState.getId()));
     }
 
     private void refresh() {
