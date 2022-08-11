@@ -120,10 +120,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case S:
-                KeyCombination saveCombinationWin = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_ANY);
-                KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_ANY);
-                if (saveCombinationWin.match(keyEvent)
-                        || saveCombinationMac.match(keyEvent)) {
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
                     savePopup.show();
                     if (!savePopup.isCanceled()) {
                         saveGame(savePopup.getInput());
