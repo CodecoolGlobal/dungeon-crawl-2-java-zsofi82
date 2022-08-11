@@ -132,10 +132,8 @@ public class Main extends Application {
                     if (!exportPopup.isCanceled()) {
                         try {
                             new Transfer().toJson(map, exportPopup.getInput());
-                        } catch (IOException e) {
-                            System.out.println("hihi");
-                        } catch (JsonIOException e) {
-                            System.out.println("haha");
+                        } catch (IOException | JsonIOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }

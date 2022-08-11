@@ -42,6 +42,6 @@ public class ExportPopup extends CancelablePopup {
 
     @Override
     public String getInput() {
-        return null;
+        return usernameInput.getText();
     }
 }
