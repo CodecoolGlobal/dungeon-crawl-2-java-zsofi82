@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap("map.txt");
     Canvas canvas = new Canvas(
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
