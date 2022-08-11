@@ -9,6 +9,9 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.ItemModel;
 import com.codecool.dungeoncrawl.ui.SavePopup;
 import com.codecool.dungeoncrawl.logic.items.Fire;
 import com.codecool.dungeoncrawl.model.PlayerModel;
@@ -27,7 +30,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -117,10 +125,28 @@ public class Main extends Application {
                 if (saveCombinationWin.match(keyEvent)
                         || saveCombinationMac.match(keyEvent)) {
                     savePopup.show();
-                    System.out.println("finished");
+                    if (!savePopup.isCanceled()) {
+                        saveGame(savePopup.getInput());
+                    }
                 }
         }
         map.getMonsters().forEach(Actor::act);
+    }
+
+    private void saveGame(String playerName) {
+        map.getPlayer().setName(playerName);
+        PlayerModel player = new PlayerModel(map.getPlayer());
+        GameState gameState = new GameState(
+            "map.txt",
+            new Date(LocalDate.now().toEpochDay()),
+            player
+        );
+        dbManager.saveGameState(gameState);
+        dbManager.savePlayer(map.getPlayer(), gameState.getId());
+        map.getMonsters().forEach(monster -> dbManager.saveMonsters(monster, gameState.getId()));
+        map.getItems()
+            .filter(Objects::nonNull)
+            .forEach(item -> dbManager.saveItems(item, gameState.getId()));
     }
 
     private void refresh() {

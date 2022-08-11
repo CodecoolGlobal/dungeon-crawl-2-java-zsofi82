@@ -15,15 +15,16 @@ public class PlayerDaoJdbc implements PlayerDao {
     }
 
     @Override
-    public void add(PlayerModel playerModel) {
+    public void add(PlayerModel playerModel, int game_state_id) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO player (player_name, hp, x, y, attack_power) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO player (player_name, hp, x, y, attack_power, game_state_id) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, playerModel.getPlayerName());
             statement.setInt(2, playerModel.getHp());
             statement.setInt(3, playerModel.getX());
             statement.setInt(4, playerModel.getY());
             statement.setInt(5, playerModel.getAttackPower());
+            statement.setInt(6, game_state_id);
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();

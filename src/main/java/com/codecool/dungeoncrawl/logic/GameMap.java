@@ -3,9 +3,12 @@ package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.items.Item;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class GameMap {
     private int width;
@@ -53,5 +56,13 @@ public class GameMap {
 
     public String listItems() {
         return String.join(", ", player.items);
+    }
+
+    public Stream<Item> getItems() {
+        return Arrays.stream(cells)
+            .flatMap(row ->
+                Arrays.stream(row)
+                    .map(Cell::getItem)
+            );
     }
 }
