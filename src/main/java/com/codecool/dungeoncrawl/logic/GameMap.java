@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GameMap {
@@ -26,6 +27,7 @@ public class GameMap {
     }
 
     public Cell getCell(int x, int y) {
+        if (x < 0 || x >= cells.length || y < 0 || y >= cells[0].length) return null;
         return cells[x][y];
     }
 

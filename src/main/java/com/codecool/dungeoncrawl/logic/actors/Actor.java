@@ -1,9 +1,12 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
-public abstract class Actor implements Drawable {
+import java.io.Serializable;
+
+public abstract class Actor implements Drawable{
 
     protected Cell cell;
     private int health = 5;
@@ -43,5 +46,12 @@ public abstract class Actor implements Drawable {
         return cell.getY();
     }
 
+    public abstract void act();
 
+    boolean actorCanMove(Cell nextCell) {
+        return nextCell.getType().equals(CellType.FLOOR)
+                && !(nextCell.getActor() instanceof Player)
+                && !(nextCell.getActor() instanceof Skeleton)
+                && !(nextCell.getActor() instanceof Zombie);
+    }
 }

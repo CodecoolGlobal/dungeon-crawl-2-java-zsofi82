@@ -5,9 +5,13 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.ui.SavePopup;
+import com.codecool.dungeoncrawl.logic.items.Fire;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -28,7 +32,6 @@ import java.sql.SQLException;
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Canvas canvas = new Canvas(
-
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM,
             DISPLAY_SIZE * Tiles.TILE_WIDTH * TILE_ZOOM);
     GraphicsContext context = canvas.getGraphicsContext2D();
@@ -53,6 +56,7 @@ public class Main extends Application {
 
         GridPane ui = new GridPane();
 
+
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
@@ -66,6 +70,7 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
+
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
@@ -87,7 +92,6 @@ public class Main extends Application {
             exit();
         }
     }
-
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
@@ -116,26 +120,7 @@ public class Main extends Application {
                     System.out.println("finished");
                 }
         }
-
-
-        map.getMonsters().forEach(monster -> {
-            if (monster instanceof Skeleton) {
-                int[] coordinates = ((Skeleton) monster).generateRandomCoordinate();
-                monster.move(coordinates[0], coordinates[1]);
-
-            } else if (monster instanceof Zombie) {
-                int[] moveCoordinates = {0, 0};
-                if (monster.getX() == 23) {
-                    moveCoordinates[0] = moveCoordinates[0] - 2;
-                    monster.move(moveCoordinates[0], moveCoordinates[1]);
-                } else if (monster.getX() == 18) {
-                    moveCoordinates[0]++;
-                    monster.move(moveCoordinates[0], moveCoordinates[1]);
-                }
-                moveCoordinates[0]++;
-                monster.move(moveCoordinates[0], moveCoordinates[1]);
-            }
-        });
+        map.getMonsters().forEach(Actor::act);
     }
 
     private void refresh() {
