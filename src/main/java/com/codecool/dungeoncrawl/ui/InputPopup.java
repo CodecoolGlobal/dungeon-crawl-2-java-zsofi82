@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -24,6 +25,12 @@ public class InputPopup extends MyPopup {
         usernameInput = new TextField();
         inputLabel = new Label();
         inputLabel.setLabelFor(usernameInput);
+
+        /*scene.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                close(false);
+            }
+        });*/
 
         HBox inputBox = new HBox(inputLabel, usernameInput);
         inputBox.setSpacing(10);
