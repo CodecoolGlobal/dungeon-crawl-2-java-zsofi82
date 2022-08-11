@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 
 import java.util.Random;
 
@@ -25,7 +24,6 @@ public class Skeleton extends Actor {
             move(relativeCoordinate[0], relativeCoordinate[1]);
         }
     }
-
 
     @Override
     public String getTileName() {
