@@ -12,20 +12,14 @@ import javafx.scene.Scene;
 import javafx.event.EventHandler;
 import javafx.stage.*;
 
-public class SavePopup {
-    Stage parentWindow, window;
+public class SavePopup extends MyPopup {
     Button saveButton, cancelButton;
     TextField usernameInput;
     Label inputLabel;
     HBox buttonBox, inputBox;
-    VBox mainContainer;
 
     public SavePopup(Stage parentWindow) {
-        this.parentWindow = parentWindow;
-        window = new Stage();
-        window.initOwner(parentWindow);
-        window.setTitle("Save");
-        window.initModality(Modality.APPLICATION_MODAL);
+        super(parentWindow, "Save");
 
         saveButton = new Button("Save");
         cancelButton = new Button("Cancel");
@@ -44,16 +38,11 @@ public class SavePopup {
         buttonBox.setPadding(new Insets(10));
         buttonBox.setPadding(new Insets(0, 10, 10, 10));
 
-        mainContainer = new VBox(inputBox, buttonBox);
+        mainContainer.getChildren().add(inputBox);
+        mainContainer.getChildren().add(buttonBox);
     }
 
-    public void show() {
-        Scene scene = new Scene(mainContainer);
-        window.setScene(scene);
-
-        window.showAndWait();
-    }
-
+    @Override
     public String getInput() {
         return usernameInput.getText();
     }
