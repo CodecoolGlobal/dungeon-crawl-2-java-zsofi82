@@ -9,8 +9,10 @@ import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.actors.Zombie;
 import com.codecool.dungeoncrawl.model.GameState;
-import com.codecool.dungeoncrawl.ui.SavePopup;
+import com.codecool.dungeoncrawl.ui.ErrorPopup;
+import com.codecool.dungeoncrawl.ui.InputPopup;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.JsonIOException;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -26,6 +28,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -41,7 +45,8 @@ public class Main extends Application {
 
     Label itemLabel = new Label();
     Label attackLabel = new Label();
-    SavePopup savePopup;
+    ErrorPopup errorPopup;
+    InputPopup inputPopup;
     GameDatabaseManager dbManager;
     final static int DISPLAY_SIZE = 11;
     final static int TILE_ZOOM = 2;
@@ -54,7 +59,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
 
-        savePopup = new SavePopup(primaryStage);
+        errorPopup = new ErrorPopup(primaryStage);
+        inputPopup = new InputPopup(primaryStage);
 
         GridPane ui = new GridPane();
 
@@ -114,13 +120,51 @@ public class Main extends Application {
                 refresh();
                 break;
             case S:
-                KeyCombination saveCombinationWin = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_ANY);
-                KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.META_ANY);
-                if (saveCombinationWin.match(keyEvent)
-                        || saveCombinationMac.match(keyEvent)) {
-                    savePopup.show();
-                    if (!savePopup.isCanceled()) {
-                        saveGame(savePopup.getInput());
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
+                    inputPopup.show(
+                        "Save game",
+                        "Save",
+                        "Cancel",
+                        "User name:"
+                    );
+                    if (!inputPopup.isCanceled()) {
+                        saveGame(inputPopup.getInput());
+                    }
+                }
+                break;
+            case E:
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
+                    inputPopup.show(
+                        "Export game",
+                        "Export",
+                        "Cancel",
+                        "Filename:"
+                    );
+                    if (!inputPopup.isCanceled()) {
+                        try {
+                            new Transfer().toJson(map, inputPopup.getInput());
+                        } catch (IOException | JsonIOException e) {
+                            e.printStackTrace();
+                            errorPopup.show(e.getMessage());
+                        }
+                    }
+                }
+                break;
+            case I:
+                if (keyEvent.isControlDown() || keyEvent.isShortcutDown()) {
+                    inputPopup.show(
+                        "Import game",
+                        "Import",
+                        "Cancel",
+                        "Filename:"
+                    );
+                    if (!inputPopup.isCanceled()) {
+                        try {
+                            map = new Transfer().fromJson(inputPopup.getInput());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            errorPopup.show(e.getMessage());
+                        }
                     }
                 }
         }
@@ -142,7 +186,6 @@ public class Main extends Application {
             .filter(Objects::nonNull)
             .forEach(item -> dbManager.saveItems(item, gameState.getId()));
     }
-
 
     private void refresh() {
         context.setFill(Color.BLACK);
