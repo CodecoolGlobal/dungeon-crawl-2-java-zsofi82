@@ -65,4 +65,8 @@ public class GameMap {
                     .map(Cell::getItem)
             );
     }
+
+    public void addMonster(Actor monster) {
+        monsters.add(monster);
+    }
 }

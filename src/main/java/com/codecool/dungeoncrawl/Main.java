@@ -161,7 +161,7 @@ public class Main extends Application {
                     if (!inputPopup.isCanceled()) {
                         try {
                             map = new Transfer().fromJson(inputPopup.getInput());
-                        } catch (FileNotFoundException e) {
+                        } catch (IOException e) {
                             e.printStackTrace();
                             errorPopup.show(e.getMessage());
                         }

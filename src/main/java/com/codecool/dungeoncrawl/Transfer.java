@@ -10,44 +10,31 @@ import com.google.gson.*;
 import java.io.*;
 import java.lang.reflect.Type;
 
-public class Transfer implements JsonDeserializer<Actor>, JsonSerializer<Actor> {
-    Gson gson;
-
-    public Transfer() {
-        GsonBuilder builder = new GsonBuilder();
-        gson = builder.registerTypeAdapter(Actor.class, this).create();
-    }
+public class Transfer {
+    Gson gson = new Gson();
 
     public void toJson(GameMap map, String filename) throws JsonIOException, IOException {
-        gson.toJson(map, new FileWriter(filename));
+        FileWriter writer = new FileWriter(filename);
+        ActorTransfer actorTransfer = new ActorTransfer(map);
+        gson.toJson(map, writer);
+        actorTransfer.toJson(map.getPlayer(), writer);
+        map.getMonsters().forEach(monster -> {
+            try {
+                actorTransfer.toJson(monster, writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    public GameMap fromJson(String filename) throws FileNotFoundException {
-        return gson.fromJson(new FileReader(filename), GameMap.class);
-    }
-
-    @Override
-    public JsonElement serialize(Actor actor, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject result = new JsonObject();
-        result.add("health", new JsonPrimitive(actor.getHealth()));
-        result.add("tilename", new JsonPrimitive(actor.getTileName()));
+    public GameMap fromJson(String filename) throws IOException {
+        FileReader reader = new FileReader(filename);
+        GameMap result = gson.fromJson(reader, GameMap.class);
+        ActorTransfer actorTransfer = new ActorTransfer(result);
+        while (reader.ready()) {
+            actorTransfer.fromJson(reader);
+        }
         return result;
     }
 
-    @Override
-    public Actor deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        JsonObject actor = jsonElement.getAsJsonObject();
-        switch (actor.get("tilename").getAsString()) {
-            case "player" -> {
-                return new Player(null);
-            }
-            case "skeleton" -> {
-                return new Skeleton(null);
-            }
-            case "zombie" -> {
-                return new Zombie(null);
-            }
-        }
-        return null;
-    }
 }
